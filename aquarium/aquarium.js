@@ -915,6 +915,8 @@ function handleContextRestored() {
 }
 
 function initialize() {
+  var fCount = 0;
+  var prevFCount = 0;
   if (g_query.numFish) {
     g_numFish[0] = parseInt(g_query.numFish);
   }
@@ -994,6 +996,7 @@ function initialize() {
 
   var then = 0.0;
   var clock = 0.0;
+  var fishCount = document.getElementById("fishCount");
   var fpsElem = document.getElementById("fps");
 
   var monoProjection = new Float32Array(16);
@@ -1347,6 +1350,7 @@ function initialize() {
 
     // Draw Fishes.
     Log("--Draw Fish---------------------------------------");
+    fCount = 0;
 
     gl.enable(gl.BLEND);
     for (var ff = 0; ff < g_fishTable.length; ++ff) {
@@ -1404,6 +1408,12 @@ function initialize() {
           fishPer.time =
               ((clock + ii * g_tailOffsetMult) * fishTailSpeed * speed) %
               (Math.PI * 2);
+          if (fCount < prevFCount) {
+            console.log("TOTAL FISH COUNT = ", prevFCount + 1)
+            fishCount.innerHTML = prevFCount + 1;
+          }
+          prevFCount = fCount
+          fCount = fCount + 1;
           fish.draw(fishPer);
 
           if (g.drawLasers && fishInfo.lasers) {
@@ -1750,6 +1760,7 @@ function initialize() {
     frameCount++;
 
     g_fpsTimer.update(elapsedTime);
+    //fishCount.innerHTML = g_query.numFish;
     fpsElem.innerHTML = g_fpsTimer.averageFPS;
 
     // If we are running > 40hz then turn on a few more options.
