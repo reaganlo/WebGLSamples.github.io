@@ -996,6 +996,7 @@ function initialize() {
 
   var then = 0.0;
   var clock = 0.0;
+  var webglStatus = document.getElementById("webglStatus");
   var fishCount = document.getElementById("fishCount");
   var fpsElem = document.getElementById("fps");
 
@@ -1409,8 +1410,24 @@ function initialize() {
               ((clock + ii * g_tailOffsetMult) * fishTailSpeed * speed) %
               (Math.PI * 2);
           if (fCount < prevFCount) {
-            console.log("TOTAL FISH COUNT = ", prevFCount + 1)
             fishCount.innerHTML = prevFCount + 1;
+            if (gl.getParameter(gl.RED_BITS) == 8 && gl.getParameter(gl.BLUE_BITS) == 8
+                && gl.getParameter(gl.GREEN_BITS) == 8 && !gl.getParameter(gl.COLOR_WRITEMASK).includes(false)
+                && gl.getParameter(gl.DEPTH_TEST) == true && gl.getParameter(gl.DITHER) == true) {
+              webglStatus.innerHTML = true;
+            } else {
+              webglStatus.innerHTML = false;
+            }
+            console.log("TOTAL FISH COUNT = ", fishCount.innerHTML)
+            console.log("WEBGL STATUS = ", webglStatus.innerHTML)
+/*
+            console.log("RED_BITS= ", gl.getParameter(gl.RED_BITS));
+            console.log("BLUE_BITS= ", gl.getParameter(gl.BLUE_BITS));
+            console.log("GREEN_BITS= ", gl.getParameter(gl.GREEN_BITS));
+            console.log("COLOR_WRITEMASK= ", gl.getParameter(gl.COLOR_WRITEMASK));
+            console.log("DEPTH_TEST= ", gl.getParameter(gl.DEPTH_TEST));
+            console.log("DITHER= ", gl.getParameter(gl.DITHER));
+*/
           }
           prevFCount = fCount
           fCount = fCount + 1;
